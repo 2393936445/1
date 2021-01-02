@@ -12,16 +12,8 @@
         onclick="window.open('https://github.com/SSmJaE/UnipusHelper','_blank')"
       ></Button>
       <Button
-        label="使用说明"
-        onclick="window.open('http://mz.3ds2.top','_blank')"
-      ></Button>
-      <Button
         label="交流群"
         onclick="window.open('https://jq.qq.com/?_wv=1027&k=AyERrFvN','_blank')"
-      ></Button>
-      <Button
-        label="折扣群"
-        onclick="window.open('https://jq.qq.com/?_wv=1027&k=tv8YouyG','_blank')"
       ></Button>
     </div>
     <div id="container-messages">
@@ -61,11 +53,8 @@ export default class Panel extends Vue {
   }
 
   showSetting() {
-    let settingBase = document.querySelector(
-      "#container-setting-base"
-    ) as HTMLElement;
-    settingBase.style.display =
-      settingBase.style.display == "table" ? "none" : "table";
+    const setting = document.querySelector("#helper-setting") as HTMLElement;
+    setting.style.display = setting.style.display == "" ? "none" : "";
   }
 
   collapsePanel() {

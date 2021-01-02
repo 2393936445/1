@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         U校园网课助手【全网唯一免费/最全u校园题库】
+// @name         Unipus网课助手
 // @namespace    https://www.github.com/SSmJaE/
-// @description  显示U校园题目答案；自动答题；支持单元测试；刷时长；开放自定义设置
-// @version      1.3.3
+// @description  显示U校园题目答案；支持单元测试、班级测试；自动答题；刷时长；开放自定义设置
+// @version      1.3.4
 // @author       rui & dan & SSmJaE
 // @license      GPL-3.0
 // @compatible   Chrome

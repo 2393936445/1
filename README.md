@@ -1,5 +1,3 @@
-如果有可以做班级测试的账号，可以提供给作者，以开发班级测试相关功能，作者手头并没有账号
-
 <h1 align="center">Unipus网课助手</h1>
 
 <p align="center">显示U校园题目答案；自动答题；支持单元测试；刷时长；开放自定义设置</p>
@@ -52,9 +50,12 @@
   - <img src="https://greasyfork.org/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbkZZIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9596826e2bb221a2c72db26a3030932cfdad3775/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9VY21WemFYcGxYM1J2WDJ4cGJXbDBXd2RwQWNocEFjZz0iLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--1a5b26c2d16a60cf381d61dcd5b41cdffac6d9dc/6A0F36CC861B089483F21D4E21274B13.png?locale=zh-CN">
 
 ## 辅助功能
-- 点击悬浮窗中的答案会<b>自动复制</b>到粘贴板
+- 点击悬浮窗中的答案会<b>自动复制</b>到粘贴板，考试中无效
 - 点击折叠按钮折叠悬浮窗
 - 双击"Unipus Helper"展开悬浮窗
+- 设置面板中的每一部分，都可以通过点击标题折叠
+- 点击最下方的保存按钮以保存更改
+- 还原默认值之后，也需要保存
 
 ## 常见问题
 - 为什么脚本没有反应？

@@ -36,6 +36,10 @@ interface UserSettings {
     solveIntervalMin: number;
     solveIntervalMax: number;
 
+    autoSolveTest: boolean;
+    solveIntervalMinTest: number;
+    solveIntervalMaxTest: number;
+
     autoRefresh: boolean;
     loop: boolean;
     randomInterval: boolean;
@@ -58,7 +62,7 @@ interface UserSettings {
 //     index: number;
 // }
 
-interface FirstGrab {
+interface EncryptedJson {
     code: number;
     content: string;
     version: number;
@@ -181,4 +185,10 @@ type InfoType = "normal" | "error" | "success" | "info" | "hr";
 interface Message {
     info: string;
     type: InfoType;
+}
+
+interface UnitTestAnswer {
+    questionType: string;
+    questionId: number;
+    answers: string[];
 }

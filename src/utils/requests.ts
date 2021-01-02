@@ -1,11 +1,5 @@
 import request from "@utils/proxy";
-import {
-    requestErrorHandler,
-    addMessage,
-    setValue,
-    getValue,
-    clearHtmlTagAndSplit,
-} from "@utils/common";
+import { requestErrorHandler, addMessage, setValue, getValue } from "@utils/common";
 
 interface GetTokenReturn {
     openId: string;
@@ -22,17 +16,36 @@ interface CheckVersionReturn {
     message: string;
 }
 
+interface UnitAnswerSuccess {
+    status: true;
+    data: UnitTestAnswer[];
+}
+
+interface UnitAnswerFail {
+    status: false;
+    error: string;
+}
+
+type UnitAnswerReturn = UnitAnswerSuccess | UnitAnswerFail;
+
 export class Requests {
-    @requestErrorHandler("token获取异常")
-    static async getToken() {
+    @requestErrorHandler("openId获取异常")
+    static async getOpenId() {
         const response = await request("https://u.unipus.cn/user/data/getToken");
         const returnJson = (await response.json()) as GetTokenReturn;
         return returnJson.openId;
     }
 
+    @requestErrorHandler("token获取异常")
+    static async getToken() {
+        const response = await request("https://u.unipus.cn/user/data/getToken");
+        const returnJson = (await response.json()) as GetTokenReturn;
+        return returnJson.token;
+    }
+
     @requestErrorHandler("身份验证异常")
     static async isExistUser() {
-        const openId = await this.getToken();
+        const openId = await this.getOpenId();
         const openIdResponse = await request(`http://mz.3ds2.top/IsExistUser.php?openid=${openId}`);
         const IsExistUserReturnJson = (await openIdResponse.json()) as IsExistUserReturn;
 
@@ -40,29 +53,27 @@ export class Requests {
     }
 
     @requestErrorHandler("单元测试答案获取异常")
-    static async getUnitTestAnswers(url: string) {
-        const response = await request("http://mz.3ds2.top/GetAnswers.php", {
-            query: {
-                url: url,
-                cookie: document.cookie,
-                user: JSON.stringify(await getValue("xiaorui")),
+    static async getUnitTestAnswers(questionId: string, token: string) {
+        const response = await request.post("/exam/", {
+            body: {
+                queryType: 0,
+                token,
+                exerciseId: /exerciseId=(.*?)&/.exec(location.href)![1] as string,
+                questionIds: [questionId],
             },
         });
-        const answers = await response.text();
-        addMessage(clearHtmlTagAndSplit(answers));
+        const returnJson = (await response.json()) as UnitAnswerReturn;
+        if (returnJson.status === false) {
+            addMessage(returnJson.error, "error");
+            return [];
+        } else {
+            return returnJson.data;
+        }
     }
 
     @requestErrorHandler("班级测试答案获取异常")
-    static async getClassTestAnswers(url: string) {
-        const response = await request("http://mz.3ds2.top/ExerciseExam.php", {
-            query: {
-                url: url,
-                cookie: document.cookie,
-                user: JSON.stringify(await getValue("xiaorui")),
-            },
-        });
-        const answers = await response.text();
-        addMessage(answers);
+    static async getClassTestAnswers(questionIds: Set<string>) {
+        throw new Error();
     }
 
     @requestErrorHandler("脚本版本查询异常")

@@ -23,7 +23,11 @@ if (!document.querySelector("#unipus-helper")) {
             <div id="container-title">Unipus Helper</div>
             <div id="container-panel"></div>
         </div>
-        <div id="container-setting-base"></div>
+        <div id="helper-setting">
+            <div id="container-setting-title">设置面板</div>
+            <hr />
+            <div id="container-setting-base"></div>
+        </div>
     `;
     document.body.appendChild(container);
 
@@ -37,11 +41,15 @@ if (!document.querySelector("#unipus-helper")) {
         false,
     );
 
-    //应用拖动
-    makeDraggable(title, document.querySelector("#unipus-helper") as HTMLElement);
-
     //挂载实例
     new Vue(Panel).$mount("#unipus-helper #container-panel");
     new Vue(Setting).$mount("#container-setting-base");
+
+    //应用拖动
+    makeDraggable(title, document.querySelector("#unipus-helper") as HTMLElement);
+    makeDraggable(
+        document.querySelector("#container-setting-title") as HTMLElement,
+        document.querySelector("#helper-setting") as HTMLElement,
+    );
 }
 // }

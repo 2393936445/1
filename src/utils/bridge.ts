@@ -64,7 +64,7 @@ class Communication {
                                     key = payload.key;
                                     const value = payload.value;
 
-                                    await new Promise((resolve) => {
+                                    await new Promise<void>((resolve) => {
                                         chrome.storage.sync.set({ [key]: value }, function() {
                                             console.log(`${key} is set to ` + value);
                                             resolve();

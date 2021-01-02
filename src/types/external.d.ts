@@ -17,6 +17,6 @@ declare global {
     // let bufferingTimer: any;
     // // let unsafeWindow: any;
 
-    const $: any; //todo types/jQuery
+    // const $: any; //todo types/jQuery
     const angular: any; //todo types/angular
 }

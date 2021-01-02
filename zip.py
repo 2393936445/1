@@ -12,7 +12,7 @@ with open("package.json", "r", encoding="utf8") as f:
     VERSION = PACKAGE["version"]
 
 
-with ZipFile(f"./dist/UnipusHelper{VERSION}.crx.zip", "w", ZIP_DEFLATED) as zf:
+with ZipFile(f"./build/UnipusHelper{VERSION}.crx.zip", "w", ZIP_DEFLATED) as zf:
     for file_ in os.listdir("dist"):
         if not file_.endswith(".zip"):
             path = os.path.join("dist", file_)

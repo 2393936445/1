@@ -1,5 +1,6 @@
 import { Global } from "../global";
 import Communication from "./bridge";
+import { Requests } from "./requests";
 
 export const injectToContent = process.env.CRX
     ? new Communication("client", "inject", "content")
@@ -51,31 +52,38 @@ export async function addMessage(
     }
 }
 
+function getProperty(ele: HTMLElement, prop: any) {
+    return parseInt(window.getComputedStyle(ele)[prop], 10);
+}
+
 /**实现拖动，带边界检测*/
 export function makeDraggable(handle: HTMLElement, container: HTMLElement) {
-    function getProperty(ele: HTMLElement, prop: any) {
-        return parseInt(window.getComputedStyle(ele)[prop]);
-    }
-
     let draggable = false,
         pastX: number,
         pastY: number,
+        containerLeft: number,
+        containerTop: number,
         containerWidth: number,
         containerHeight: number,
-        containerLeft = getProperty(container, "left"),
-        containerTop = getProperty(container, "top"),
-        windowWidth = window.innerWidth,
-        windowHeight = window.innerHeight;
+        windowWidth: number,
+        windowHeight: number;
 
     handle.addEventListener(
         "mousedown",
         (e) => {
             handle.style.cursor = "grabbing";
             draggable = true;
+
             pastX = e.clientX;
             pastY = e.clientY;
+
+            containerLeft = getProperty(container, "left");
+            containerTop = getProperty(container, "top");
             containerWidth = getProperty(container, "width");
             containerHeight = getProperty(container, "height");
+
+            windowWidth = window.innerWidth;
+            windowHeight = window.innerHeight;
         },
         false,
     );
@@ -105,6 +113,7 @@ export function makeDraggable(handle: HTMLElement, container: HTMLElement) {
         () => {
             handle.style.cursor = "grab";
             draggable = false;
+
             containerLeft = getProperty(container, "left");
             containerTop = getProperty(container, "top");
         },
@@ -116,9 +125,9 @@ export function makeDraggable(handle: HTMLElement, container: HTMLElement) {
         "keydown",
         (e) => {
             if (e.key === "Escape") {
-                // console.log(e);
                 handle.style.cursor = "grab";
                 draggable = false;
+
                 containerLeft = getProperty(container, "left");
                 containerTop = getProperty(container, "top");
             }
@@ -133,15 +142,14 @@ export function makeDraggable(handle: HTMLElement, container: HTMLElement) {
  *
  * 如果使用了装饰器，但是未提供message，输出默认值
  */
-export function requestErrorHandler(message: string = "请求异常，稍后再试") {
+export function requestErrorHandler(message: string = "请求异常，稍后再试", originError = false) {
     return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
         const originalMethod = descriptor.value;
 
         descriptor.value = function(...args: any[]) {
             const result = originalMethod.apply(this, args);
             result.catch((error: Error) => {
-                addMessage(`${message}`, "error");
-                // addMessage(`${error}`, "error");
+                addMessage(`${originError ? error : message}`, "error");
             });
             return result;
         };
@@ -213,4 +221,31 @@ export function clearHtmlTagAndSplit(text: string) {
 
         return buffer;
     });
+}
+
+interface OpenIdStatus {
+    [openId: string]: boolean;
+}
+
+export async function authenticate() {
+    const openId = await Requests.getOpenId();
+    let openIdStatus: OpenIdStatus = await getValue("openIdStatus", {});
+
+    if (openIdStatus[openId]) {
+        //如果已经认证通过
+        return true;
+    } else {
+        const isExistUseReturnJson = await Requests.isExistUser();
+        if (isExistUseReturnJson.status) {
+            //认证成功
+            openIdStatus[openId] = true;
+            await setValue("openIdStatus", openIdStatus);
+            return true;
+        } else {
+            //认证失败
+            Global.messages = [];
+            addMessage(`${isExistUseReturnJson.message}`, "info");
+            return false;
+        }
+    }
 }

@@ -1,5 +1,5 @@
 import { Global } from "@src/global";
-import { addMessage, sleep, setValue, getValue } from "@utils/common";
+import { addMessage, authenticate } from "@utils/common";
 
 import { parseAnswers } from "./parser";
 import { solveQuestions } from "./solver";
@@ -18,37 +18,12 @@ async function outputAnswers(answers: string[]) {
     }
 }
 
-import { Requests } from "@utils/requests";
-
-interface OpenIdStatus {
-    [openId: string]: boolean;
-}
-
-export async function handleQuestions(encryptedJson: FirstGrab) {
+export async function handleQuestions(encryptedJson: EncryptedJson) {
     let continueFlag = false;
     if (process.env.LITE) {
         continueFlag = true;
     } else {
-        const openId = await Requests.getToken();
-        let openIdStatus: OpenIdStatus = await getValue("openIdStatus", {});
-
-        if (openIdStatus[openId]) {
-            //如果已经认证通过
-            continueFlag = true;
-        } else {
-            const isExistUseReturnJson = await Requests.isExistUser();
-            if (isExistUseReturnJson.status) {
-                //认证成功
-                continueFlag = true;
-
-                openIdStatus[openId] = true;
-                setValue("openIdStatus", openIdStatus);
-            } else {
-                //认证失败
-                Global.messages = [];
-                addMessage(`${isExistUseReturnJson.message}`, "info");
-            }
-        }
+        continueFlag = await authenticate();
     }
 
     if (continueFlag) {
@@ -58,7 +33,7 @@ export async function handleQuestions(encryptedJson: FirstGrab) {
         console.log(answers);
         outputAnswers(answers);
 
-        if (Global.USER_SETTINGS.autoSolveNormal) {
+        if (Global.USER_SETTINGS.autoSolveNormal && questionType !== "debug") {
             solveQuestions(questionType, answers);
         }
     }

@@ -49,7 +49,7 @@
         </div>
       </ToggleSlide>
     </div>
-    <div class="container-setting-footer">
+    <div id="container-setting-footer">
       <Button label="保存 & 刷新" @click="saveChange"></Button>
       <Button label="还原默认值" @click="setDefault"></Button>
     </div>
@@ -90,6 +90,8 @@ export default class Setting extends Vue {
 
   created() {
     Requests.checkVersion(VERSION);
+    const setting = document.querySelector("#helper-setting") as HTMLElement;
+    setting.style.display = "none";
   }
 
   /**自动转换input的值为对应类型
@@ -125,27 +127,49 @@ export default class Setting extends Vue {
 }
 </script>
 
-<style scoped>
-#container-setting-base {
-  display: none;
+<style>
+#helper-setting {
+  /* display: none; */
   position: fixed;
 
   top: 20%;
-  left: 50%;
-  width: 800px;
-  margin: 20px;
+  left: 20%;
   z-index: 101;
 
-  font-size: 16px;
-  line-height: 100%;
+  /* width: 750px; */
+  /* min-width: 500px;
+  max-width: 800px; */
 
   background: rgba(255, 255, 255, 0.95);
+  /* background: rgba(124, 11, 11, 0.95); */
   border: black 2px solid;
   border-radius: 20px;
 
-  transform: translate(-50%, 0%);
-  animation: slide_in 0.8s;
-  animation-timing-function: ease-out;
+  margin: 0 auto;
+  /* transform: translate(-50%, 0%); */
+  /* animation: slide_in 0.8s;
+  animation-timing-function: ease-out; */
+}
+
+#container-setting-title {
+  cursor: grab;
+  user-select: none;
+
+  font-size: 28px;
+  font-family: "华文新魏", "新宋体";
+  text-align: center;
+  line-height: normal;
+
+  background: rgba(0, 0, 0, 0);
+  margin-top: 10px;
+}
+
+#container-setting-base {
+  display: table;
+  /* margin: 20px; */
+
+  font-size: 16px;
+  line-height: 100%;
 }
 
 @keyframes slide_in {
@@ -164,38 +188,38 @@ export default class Setting extends Vue {
   }
 }
 
-div.section {
+#container-setting-base div.section {
   margin: 0 10px;
 }
 
-div.title {
+#container-setting-base div.title {
   text-align: center;
   font-size: 24px;
   cursor: pointer;
   margin-bottom: 5px;
 }
 
-div.body {
+#container-setting-base div.body {
   overflow: hidden;
 }
 
 /* -------------------- */
 
-div.record {
+#container-setting-base div.record {
   display: table-row;
   text-align: center;
   margin: 5px 0px;
   padding: 5px;
 }
 
-.record-left {
+#container-setting-base .record-left {
   display: table-cell;
   cursor: pointer;
   width: 80px;
 }
 
 /* 中间部分居中对齐的实现 */
-.record-middle {
+#container-setting-base .record-middle {
   display: table-cell;
   text-align: center;
   min-width: 100px;
@@ -205,40 +229,40 @@ div.record {
   padding: 0px;
 }
 
-.record-middle .input {
+#container-setting-base .record-middle .input {
   width: 80px;
   height: 21px;
   text-align: center;
   font-size: 16px;
 }
 
-.record-middle .my-switch {
+#container-setting-base .record-middle .my-switch {
   vertical-align: middle;
   margin: 2px 5px;
 }
 
-.record-middle .readonly {
+#container-setting-base .record-middle .readonly {
   min-height: 25px;
   margin-top: 5px;
 }
 /* -------------------- */
 
-.record-right {
+#container-setting-base .record-right {
   display: table-cell;
   text-align: left;
 }
 
-hr {
+#container-setting-base hr {
   margin: 5px;
 }
 
-.container-setting-footer {
+#container-setting-footer {
   display: flex;
   justify-content: center;
   /* justify-content: flex-end; */
   margin: 5px 0;
 }
-.container-setting-footer .my-button {
+#container-setting-footer .my-button {
   margin: 0 5px;
 }
 </style>

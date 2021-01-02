@@ -49,6 +49,6 @@ setInterval(() => {
 
         lastUrl = location.href;
     } catch (error) {
-        console.error("非作答页面");
+        console.error("非普通练习作答页面");
     }
 }, 2000);

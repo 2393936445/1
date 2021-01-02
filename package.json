@@ -1,14 +1,13 @@
 {
   "name": "unipus_helper",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Unipus网课助手",
   "private": true,
   "scripts": {
-    "watch": "webpack --watch --config webpack.dev.babel.js",
     "server": "webpack-dev-server --open --config webpack.dev.babel.js",
-    "dev": "webpack --config webpack.dev.babel.js",
-    "crx": "webpack --config webpack.crx.babel.js",
-    "gf": "webpack --config webpack.gf.babel.js",
+    "crx:dev": "webpack --watch --config webpack.crx.babel.js --mode=development --devtools ",
+    "crx:prod": "webpack --config webpack.crx.babel.js --mode=production",
+    "full": "webpack --config webpack.full.babel.js",
     "lite": "webpack --config webpack.lite.babel.js"
   },
   "author": "SSmJaE",
@@ -21,6 +20,7 @@
     "@babel/register": "^7.11.5",
     "@types/chrome": "0.0.126",
     "@types/crypto-js": "^4.0.1",
+    "@types/jquery": "^3.5.5",
     "@types/node": "^14.10.1",
     "@types/tampermonkey": "^4.0.0",
     "babel-loader": "^8.1.0",
@@ -45,6 +45,7 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "crypto-js": "^4.0.0",
+    "jquery": "^3.5.1",
     "query-string": "^6.13.7",
     "reflect-metadata": "^0.1.13",
     "sweetalert": "^2.1.2",

@@ -6,9 +6,7 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
 
 export default {
-    mode: "production",
-    // mode: "development",
-    // devtool: "inline-source-map",
+    devtool:  "inline-source-map",
     entry: {
         main: "./src/main.ts",
         inject: "./src/inject.ts",

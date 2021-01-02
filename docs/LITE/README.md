@@ -1,10 +1,11 @@
 # This script does not require a token or ID or join-to-use
-# 本版本是Unipus网课助手的轻量版，仅支持普通练习和刷时长，不需要绑定token或者id，完整版在Github上，支持单元测试
-# 如果有可以做班级测试的账号，可以提供给作者，以开发班级测试相关功能，作者手头并没有账号
+# 本版本是Unipus网课助手的轻量版，仅支持普通练习和刷时长，不需要绑定token或者id
+# 完整版在Github上，支持单元测试、班级测试
+# 也可以直接通过[Chrome网上应用店](https://chrome.google.com/webstore/search/unipus%E7%BD%91%E8%AF%BE%E5%8A%A9%E6%89%8B)安装
 
 <h1 align="center">Unipus网课助手</h1>
 
-<p align="center">显示U校园题目答案；自动答题；不支持单元测试、班级测试；刷时长；开放自定义设置</p>
+<p align="center">显示U校园题目答案；自动答题；支持单元测试、班级测试；刷时长；开放自定义设置</p>
 
 <p align="center">
 <a href="https://github.com/SSmJaE/UnipusHelper">Github</a> · 

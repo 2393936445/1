@@ -1,6 +1,6 @@
 import * as CryptoJS from "crypto-js";
-// import { AES, enc, mode, pad } from "crypto-js";
-function decrypt(json: FirstGrab) {
+
+function decrypt(json: EncryptedJson) {
     if (json) {
         let r = json.content.slice(7),
             o = CryptoJS.enc.Utf8.parse("1a2b3c4d" + json.k),
@@ -12,43 +12,19 @@ function decrypt(json: FirstGrab) {
                     padding: CryptoJS.pad.ZeroPadding,
                 }).toString(CryptoJS.enc.Utf8),
             );
-        // let r = json.content.slice(7),
-        //     o = enc.Utf8.parse("1a2b3c4d" + json.k),
-        //     i = enc.Hex.parse(r),
-        //     a = enc.Base64.stringify(i),
-        //     contentJson = JSON.parse(
-        //         AES.decrypt(a, o, {
-        //             mode: mode.ECB,
-        //             padding: pad.ZeroPadding,
-        //         }).toString(enc.Utf8),
-        //     );
         json = contentJson;
-        console.log(json);
     }
     return json;
 }
-
-// enum QuestionKeys {
-//     shortAnswer = "questions:shortanswer", //大填空（长篇
-//     shortAnswer2 = "shortanswer:shortanswer",
-//     scoopQuestions = "questions:scoopquestions", //小填空
-//     sequence = "questions:sequence", //排序
-//     questions = "questions:questions", //选择（多选、单选）、也可能是填空题目
-//     scoopSelection = "questions:scoopselection", //下拉
-//     textMatch = "questions:textmatch", //大意填空（长篇
-//     bankedCloze = "questions:bankedcloze", //单填空，视听说选填A-E
-// }
-
-// QuestionKeys.bankedCloze
 
 /**answerSheetType */
 const QUESTION_SELECTORS = [
     'input[name^="single-"]', //1单选
     'input[class^="MultipleChoice--checkbox-"]', //2多选
     'input[class^="fill-blank--bc-input"]', //3小填空
-    'textarea[class^="writing--textarea"]', //4大填空
+    'textarea[class^="writing--textarea"]', //4大填空/无脑填空题
     'div[class^="cloze-text-pc--fill-blank"]', //5大意填空（text match）
-    'input[class^="cloze-text-pc--bc-input"]', //6单填空
+    'input[class^="cloze-text-pc--bc-input"]', //6单填空/选择填空题
     'pre[class^="writing--pre"]',
 ];
 
@@ -68,12 +44,12 @@ const CATEGORY = QUESTION_KEYS.map((category) => category.split(":")[1]);
 //content_1:scoopquestions "fillblankScoop"
 //content_2:scoopquestions "fillblankScoop"
 
-interface ExercisedAnswer {
+interface ExerciseAnswer {
     questionType: string;
     answers: string[];
 }
 
-export function parseAnswers(json: FirstGrab) {
+export function parseAnswers(json: EncryptedJson): ExerciseAnswer {
     const decryptedJson = decrypt(json);
     //多页题可能乱序
     const orderedJson = Object.fromEntries(
@@ -182,24 +158,35 @@ export function parseAnswers(json: FirstGrab) {
         default:
             //也就是sheet==0
             switch (answerNetType) {
-                // case 2: //没遇到过
-                //     break;
                 case 4: //排序
+                    questionType = "sequence";
                     for (const question of questionBase.questions) {
                         answers.push(question.answer);
                     }
                     break;
 
                 case 6: //下拉
-                    questionType = "sequence";
+                    questionType = "dropdown";
                     for (const question of questionBase.questions) {
                         //可能没有标答，提供默认答案
                         question.answers ? answers.push(question.answers[0]) : answers.push("A");
                     }
                     break;
+
+                default:
+                    questionType = "debug";
+                    answers = [
+                        "此题型尚未适配，请在Github的Issue中反馈",
+                        `answerSheetType ${answerSheetType}`,
+                        `answerNetType ${answerNetType}`,
+                    ];
+                    break;
             }
             break;
     }
 
-    return { questionType: questionType, answers: answers };
+    return {
+        questionType,
+        answers,
+    };
 }
