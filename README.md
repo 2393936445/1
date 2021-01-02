@@ -72,6 +72,6 @@
 
 ## 其它
 - 用爱发电，佛系更新
-- 感谢李恒道, 王一之, [DanDan](https://github.com/Dandanla), [askar882](https://greasyfork.org/zh-CN/users/291023-askar882), U++原作者
+- 感谢李恒道, [王一之](https://github.com/CodFrm), [DanDan](https://github.com/Dandanla), [askar882](https://greasyfork.org/zh-CN/users/291023-askar882), U++原作者
 - 本项目基于Typescript + Vue, 很欢迎感兴趣的同学一起来[开发](docs/DEVELOPMENT.md)
 
