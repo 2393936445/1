@@ -12,9 +12,6 @@
 <a href="https://github.com/SSmJaE/WELearnHelper/issues">功能请求</a> · -->
 </p>
 
-## 友情链接
-- <a href="https://jq.qq.com/?_wv=1027&amp;k=Hh7gvvDz" rel="nofollow">大学生优惠购物,每天都能领优惠券还能获得返利!!!买前看一看,一年省下一部手机钱.</a>【广告】
-
 ## 声明
 - 本项目基于GPL-3.0，完全开源，免费，仅供技术学习和交流，开发者团队并未授权任何组织、机构以及个人将其用于商业或者盈利性质的活动。也从未使用本项目进行任何盈利性活动。未来也不会将其用于开展营利性业务。个人或者组织，机构如果使用本项目产生的各类纠纷，法律问题，均由其本人承担。
 - 如果您开始使用本项目，即视为同意项目免责声明中的一切条款，条款更新不再另行通知。
@@ -44,10 +41,8 @@
   - 集成U校园时长专门(也可以说U校园时长专门是这一模块的独立版本)
   - 默认关闭
 - 考试
-  - 本插件需要关注公众号：“英语思刊” 绑定id(插件自动生成)使用
-  - 请认真按照提示获取答案，出现undefined请重新登陆
-  - <img src="https://greasyfork.org/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbkJZIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--97b51ab9aa3d0f01c98f3c6c6bad7d30b737bb1d/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9VY21WemFYcGxYM1J2WDJ4cGJXbDBXd2RwQWNocEFjZz0iLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--1a5b26c2d16a60cf381d61dcd5b41cdffac6d9dc/QQ%E6%88%AA%E5%9B%BE20201026200432.jpg?locale=zh-CN">
-  - <img src="https://greasyfork.org/rails/active_storage/representations/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBbkZZIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--9596826e2bb221a2c72db26a3030932cfdad3775/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdCam9VY21WemFYcGxYM1J2WDJ4cGJXbDBXd2RwQWNocEFjZz0iLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--1a5b26c2d16a60cf381d61dcd5b41cdffac6d9dc/6A0F36CC861B089483F21D4E21274B13.png?locale=zh-CN">
+  - 进入考试页面，如果是支持的课程，会自动显示答案
+  - 不建议使用
 
 ## 辅助功能
 - 点击悬浮窗中的答案会<b>自动复制</b>到粘贴板，考试中无效
