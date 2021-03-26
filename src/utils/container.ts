@@ -4,7 +4,7 @@ import Vue from "vue";
 import Ripple from "vue-ripple-directive";
 Vue.directive("ripple", Ripple);
 
-import { Global } from "@src/global";
+import { store } from "@src/store";
 import { makeDraggable } from "@utils/common";
 
 import Panel from "@src/views/Panel.vue";
@@ -36,7 +36,7 @@ if (!document.querySelector("#unipus-helper")) {
     title.addEventListener(
         "dblclick",
         () => {
-            Global.collapse = true;
+            store.collapse = true;
         },
         false,
     );

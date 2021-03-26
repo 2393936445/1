@@ -34,7 +34,9 @@
                   class="input"
                   :value="Global.USER_SETTINGS[setting.id]"
                   @input="
-                    Global.USER_SETTINGS[setting.id] = convertValueType(
+                    Global.USER_SETTINGS[
+                      setting.id
+                    ] = convertValueType(
                       setting.id,
                       $event.target.value
                     )
@@ -59,8 +61,9 @@
 <script lang="ts">
 import "reflect-metadata";
 import { Component, Vue, Prop } from "vue-property-decorator";
+import debounce from "lodash/debounce";
 
-import { Global, VERSION } from "../global";
+import { store, VERSION } from "@src/store";
 import {
   controlCenter,
   returnDefaultValues,
@@ -85,8 +88,9 @@ import ToggleSlide from "./animations/ToggleSlide.vue";
   },
 })
 export default class Setting extends Vue {
-  Global = Global;
+  Global = store;
   sections = controlCenter;
+  debouncedConvertValueType = debounce(this.convertValueType, 200);
 
   created() {
     Requests.checkVersion(VERSION);
@@ -117,7 +121,7 @@ export default class Setting extends Vue {
   }
 
   async saveChange() {
-    await setValue("USER_SETTINGS", Global.USER_SETTINGS);
+    await setValue("USER_SETTINGS", store.USER_SETTINGS);
     location.reload(true);
   }
 
@@ -136,12 +140,7 @@ export default class Setting extends Vue {
   left: 20%;
   z-index: 101;
 
-  /* width: 750px; */
-  /* min-width: 500px;
-  max-width: 800px; */
-
   background: rgba(255, 255, 255, 0.95);
-  /* background: rgba(124, 11, 11, 0.95); */
   border: black 2px solid;
   border-radius: 20px;
 
@@ -163,7 +162,9 @@ export default class Setting extends Vue {
   background: rgba(0, 0, 0, 0);
   margin-top: 10px;
 }
+</style>
 
+<style scoped>
 #container-setting-base {
   display: table;
   /* margin: 20px; */
@@ -188,38 +189,38 @@ export default class Setting extends Vue {
   }
 }
 
-#container-setting-base div.section {
+div.section {
   margin: 0 10px;
 }
 
-#container-setting-base div.title {
+div.title {
   text-align: center;
   font-size: 24px;
   cursor: pointer;
   margin-bottom: 5px;
 }
 
-#container-setting-base div.body {
+div.body {
   overflow: hidden;
 }
 
 /* -------------------- */
 
-#container-setting-base div.record {
+div.record {
   display: table-row;
   text-align: center;
   margin: 5px 0px;
   padding: 5px;
 }
 
-#container-setting-base .record-left {
+.record-left {
   display: table-cell;
   cursor: pointer;
   width: 80px;
 }
 
 /* 中间部分居中对齐的实现 */
-#container-setting-base .record-middle {
+.record-middle {
   display: table-cell;
   text-align: center;
   min-width: 100px;
@@ -229,30 +230,30 @@ export default class Setting extends Vue {
   padding: 0px;
 }
 
-#container-setting-base .record-middle .input {
+.record-middle .input {
   width: 80px;
   height: 21px;
   text-align: center;
   font-size: 16px;
 }
 
-#container-setting-base .record-middle .my-switch {
+.record-middle .my-switch {
   vertical-align: middle;
   margin: 2px 5px;
 }
 
-#container-setting-base .record-middle .readonly {
+.record-middle .readonly {
   min-height: 25px;
   margin-top: 5px;
 }
 /* -------------------- */
 
-#container-setting-base .record-right {
+.record-right {
   display: table-cell;
   text-align: left;
 }
 
-#container-setting-base hr {
+hr {
   margin: 5px;
 }
 

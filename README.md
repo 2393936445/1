@@ -32,11 +32,14 @@
 - Chrome扩展
   - 直接在[Chrome网上应用店](https://chrome.google.com/webstore/search/unipus%E7%BD%91%E8%AF%BE%E5%8A%A9%E6%89%8B)安装
   - 在Release中下载UnipusHelper[版本号].crx.zip压缩包，添加至chrome即可
+- 在Github上找不到下载的地方？
+  - 点击页面右侧的Release，.user.js结尾即为油猴脚本，.crx.zip结尾，即为chrome扩展
 
 ## 使用
 - 点击***左上角齿轮***进行功能设定
 - 练习
   - 进入练习页面，如果是支持的课程，会自动显示答案
+  - 支持多页题
   - 自动答题
     - 只支持<b>部分课程</b>的部分题型
     - 默认关闭

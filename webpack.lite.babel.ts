@@ -1,10 +1,10 @@
-import * as fs from "fs";
+import fs from "fs";
 
-import webpack from "webpack";
+import webpack, { Configuration } from "webpack";
 import { merge } from "webpack-merge";
 import common from "./webpack.common.babel.js";
 
-export default merge(common, {
+const config: Configuration = {
     mode: "production",
     optimization: {
         minimize: false,
@@ -25,4 +25,6 @@ export default merge(common, {
         $: "jQuery",
         "crypto-js": "CryptoJS",
     },
-});
+};
+
+export default merge(common, config);

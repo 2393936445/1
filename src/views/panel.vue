@@ -33,9 +33,9 @@
 
 <script lang="ts">
 import "reflect-metadata";
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 
-import { Global } from "../global";
+import { store } from "@src/store";
 import { copyToClipboard } from "@utils/common";
 
 import Button from "./components/Button.vue";
@@ -46,10 +46,10 @@ import Button from "./components/Button.vue";
   },
 })
 export default class Panel extends Vue {
-  Global = Global;
+  Global = store;
 
   autoCopy(text: string) {
-    if (Global.USER_SETTINGS.autoCopy) copyToClipboard(text);
+    if (store.USER_SETTINGS.autoCopy) copyToClipboard(text);
   }
 
   showSetting() {
@@ -63,7 +63,7 @@ export default class Panel extends Vue {
 }
 </script>
 
-<style>
+<style lang="postcss">
 #unipus-helper {
   top: 100px;
   left: 100px;
@@ -80,10 +80,10 @@ export default class Panel extends Vue {
 
   font-family: Georgia, "Times New Roman", Times, serif;
   line-height: normal;
-}
 
-#unipus-helper:not(:hover) {
-  filter: brightness(98%);
+  &:not(:hover) {
+    filter: brightness(98%);
+  }
 }
 
 #container-title {
@@ -95,7 +95,9 @@ export default class Panel extends Vue {
 
   background: rgba(0, 0, 0, 0);
 }
+</style>
 
+<style scoped lang="postcss">
 #container-setting-button {
   position: absolute;
   top: 3px;
@@ -104,10 +106,10 @@ export default class Panel extends Vue {
   font-size: 23px;
 
   cursor: pointer;
-}
 
-#container-setting-button:hover {
-  color: rgb(0, 230, 227);
+  &:hover {
+    color: rgb(0, 230, 227);
+  }
 }
 
 #container-control button {
@@ -119,6 +121,22 @@ export default class Panel extends Vue {
   border: black 1px solid;
   max-height: 400px;
   overflow-y: auto;
+
+  & .error {
+    color: red;
+  }
+
+  & .success {
+    color: green;
+  }
+
+  & .info {
+    color: #2196f3;
+  }
+
+  & hr {
+    margin: 5px 0px;
+  }
 }
 
 .container-message {
@@ -132,27 +150,12 @@ export default class Panel extends Vue {
   padding: 0px;
   padding-bottom: 3px;
   line-height: 120%;
-}
-.container-message:hover:not(hr) {
-  padding-bottom: 1px;
-  border-bottom: 2px solid black;
-  cursor: copy;
-}
 
-#container-messages .error {
-  color: red;
-}
-
-#container-messages .success {
-  color: green;
-}
-
-#container-messages .info {
-  color: #2196f3;
-}
-
-#container-messages hr {
-  margin: 5px 0px;
+  &:hover:not(hr) {
+    padding-bottom: 1px;
+    border-bottom: 2px solid black;
+    cursor: copy;
+  }
 }
 
 @keyframes content_slide_in {
@@ -167,3 +170,5 @@ export default class Panel extends Vue {
   }
 }
 </style>
+
+

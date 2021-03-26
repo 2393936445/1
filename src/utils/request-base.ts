@@ -46,12 +46,16 @@ interface GM_xmlhttpResponse {
     responseText: string;
 }
 
-export interface CustomResponse extends GM_xmlhttpResponse {
-    json(): Promise<any>;
+export interface CustomXhrResponse<T = any> extends GM_xmlhttpResponse {
+    json(): Promise<T>;
+    text(): Promise<string>;
+}
+export interface CustomFetchResponse<T = any> {
+    json(): Promise<T>;
     text(): Promise<string>;
 }
 
-import { BASE_URL } from "@src/global";
+import { BASE_URL } from "@src/store";
 import * as queryString from "query-string";
 
 function generateFinalUrl(url: string) {
@@ -64,7 +68,7 @@ if (typeof GM_xmlhttpRequest !== "function") {
 }
 
 /**对GM_xmlhttpRequest的封装，以实现一致的fetch风格的request通用接口 */
-function requestOfGm(
+function requestOfGm<T = any>(
     url: string,
     init: Init = { method: "GET", headers: {}, body: undefined, query: undefined },
 ) {
@@ -76,7 +80,7 @@ function requestOfGm(
             ? queryString.stringifyUrl({ url: url, query: init.query })
             : url;
 
-    return new Promise<CustomResponse>((resolve, reject) => {
+    return new Promise<CustomXhrResponse<T>>((resolve, reject) => {
         GM_xmlhttpRequest({
             url: generateFinalUrl(url),
             method: init.method,
@@ -84,10 +88,10 @@ function requestOfGm(
             data: body,
             timeout: 5000,
             responseType: "json",
-            onload(response: CustomResponse) {
+            onload(response: CustomXhrResponse) {
                 const code = response.status;
                 if (code >= 200 && code <= 300) {
-                    response.json = () => new Promise<any>((resolve) => resolve(response.response));
+                    response.json = () => new Promise((resolve) => resolve(response.response));
                     response.text = () =>
                         new Promise<string>((resolve) => resolve(response.responseText));
 
@@ -113,10 +117,10 @@ function generateFinalUrlWithQueryParams(url: string, query: StringifiableRecord
 }
 
 /**对crx sendMessage的封装，以实现一致的fetch风格的request通用接口 */
-async function requestOfCrx(
+async function requestOfCrx<T = any>(
     url: string,
     init: Init = { method: "GET", headers: {}, body: undefined, query: undefined },
-): Promise<Response> {
+): Promise<CustomFetchResponse<T>> {
     return new Promise<Response>(async (resolve, reject) => {
         const { body, query, ...realisticInit } = init;
 

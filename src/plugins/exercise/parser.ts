@@ -1,4 +1,4 @@
-import * as CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js";
 
 function decrypt(json: EncryptedJson) {
     if (json) {
@@ -25,7 +25,8 @@ const QUESTION_SELECTORS = [
     'textarea[class^="writing--textarea"]', //4大填空/无脑填空题
     'div[class^="cloze-text-pc--fill-blank"]', //5大意填空（text match）
     'input[class^="cloze-text-pc--bc-input"]', //6单填空/选择填空题
-    'pre[class^="writing--pre"]',
+    'pre[class^="writing--pre"]', //7
+    '[class^="sentencesToRead--item"]', //8朗读句子
 ];
 
 /**answerNetType */
@@ -38,11 +39,14 @@ const QUESTION_KEYS = [
     "questions:scoopselection", //6下拉
     "questions:textmatch", //7大意填空（长篇
     "questions:bankedcloze", //8单填空，视听说选填A-E
+    "SentencesToRead:sentencesforrecord", //9朗读句子
 ];
 
 const CATEGORY = QUESTION_KEYS.map((category) => category.split(":")[1]);
 //content_1:scoopquestions "fillblankScoop"
 //content_2:scoopquestions "fillblankScoop"
+
+const NO_ANSWER_TITLES = ["Background information", "Text", "Vocabulary"];
 
 interface ExerciseAnswer {
     questionType: string;
@@ -83,6 +87,8 @@ export function parseAnswers(json: EncryptedJson): ExerciseAnswer {
     }
     console.log({ answerSheetType: answerSheetType, answerNetType: answerNetType });
 
+    const currentSectionTitle = document.querySelector("#header .TabsBox li.active")?.textContent;
+
     let questionType = "";
     let answers: string[] = [];
     switch (answerSheetType) {
@@ -91,7 +97,11 @@ export function parseAnswers(json: EncryptedJson): ExerciseAnswer {
                 //真单选
                 questionType = "singleChoice";
                 for (const question of questionBase.questions) {
-                    answers.push(question.answers[0].replace(" ", ""));
+                    if (question.answers.length) {
+                        answers.push(question.answers[0].replace(" ", ""));
+                    } else {
+                        answers.push("A" as string); //没有标答的情况
+                    }
                 }
             }
             break;
@@ -101,10 +111,10 @@ export function parseAnswers(json: EncryptedJson): ExerciseAnswer {
                 //多选
                 questionType = "multiChoice";
                 for (const question of questionBase.questions) {
-                    if (!question.answers.length) {
-                        answers.push((["A"] as unknown) as string); //没有标答的情况
-                    } else {
+                    if (question.answers.length) {
                         answers.push(question.answers);
+                    } else {
+                        answers.push((["A"] as unknown) as string); //没有标答的情况
                     }
                 }
             }
@@ -155,6 +165,16 @@ export function parseAnswers(json: EncryptedJson): ExerciseAnswer {
             }
             break;
 
+        case 8:
+            if (answerNetType === 9) {
+                //朗读句子
+                questionType = "sentencesToRead";
+                for (const audio of questionBase.audios) {
+                    answers.push(audio.html);
+                }
+            }
+            break;
+
         default:
             //也就是sheet==0
             switch (answerNetType) {
@@ -175,11 +195,17 @@ export function parseAnswers(json: EncryptedJson): ExerciseAnswer {
 
                 default:
                     questionType = "debug";
-                    answers = [
-                        "此题型尚未适配，请在Github的Issue中反馈",
-                        `answerSheetType ${answerSheetType}`,
-                        `answerNetType ${answerNetType}`,
-                    ];
+
+                    if (NO_ANSWER_TITLES.includes(currentSectionTitle as string)) {
+                        answers = ["此题型无答案"];
+                    } else {
+                        answers = [
+                            "此题型尚未适配，请在Github的Issue中反馈",
+                            `answerSheetType ${answerSheetType}`,
+                            `answerNetType ${answerNetType}`,
+                        ];
+                    }
+
                     break;
             }
             break;

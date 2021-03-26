@@ -1,6 +1,10 @@
-import { Global } from "../global";
+// import { actions } from "@src/store";
+import { addMessage, clearMessage } from "@src/store/actions";
 import Communication from "./bridge";
 import { Requests } from "./requests";
+
+// const { addMessage, clearMessage } = actions;
+// webpack编译后有循环引用的问题，必须直接从/actions中导入
 
 export const injectToContent = process.env.CRX
     ? new Communication("client", "inject", "content")
@@ -8,48 +12,6 @@ export const injectToContent = process.env.CRX
 
 export function sleep(ms: number) {
     return new Promise<void>((resolve) => setTimeout(resolve, ms));
-}
-
-/**添加多条消息 */
-export async function addMessage(message: Array<string | number> | Array<Message>): Promise<void>;
-/**添加一条消息 */
-export async function addMessage(message: string | number, type?: InfoType): Promise<void>;
-export async function addMessage(
-    message: Array<string | number> | Array<Message> | string | number,
-    type: InfoType = "normal",
-) {
-    function scrollDown() {
-        (<HTMLElement>document.querySelector("#container-messages")).scrollBy(0, 1000);
-    }
-
-    async function add(finalInfo: string, finalType: InfoType, single = true) {
-        if (finalType !== "hr") {
-            //除了添加分隔线以外的情况，消息都不应为空
-            if (finalInfo === "") return;
-        }
-        Global.messages.push({ info: finalInfo, type: finalType });
-
-        if (Global.USER_SETTINGS.autoSlide && single === true) {
-            await sleep(10); //等待message渲染完成，不然不会拉到最底
-            scrollDown();
-        }
-    }
-
-    if (Array.isArray(message)) {
-        for (const line of message) {
-            if (typeof line === "object") {
-                //Message[]
-                await add(line.info, line.type, false);
-            } else {
-                //未提供消息类型，(string|number)[]
-                await add(String(line), "normal", false);
-            }
-        }
-        scrollDown();
-    } else {
-        //可能提供了type，所以用默认值参数
-        await add(String(message), type);
-    }
 }
 
 function getProperty(ele: HTMLElement, prop: any) {
@@ -243,9 +205,56 @@ export async function authenticate() {
             return true;
         } else {
             //认证失败
-            Global.messages = [];
+            clearMessage();
             addMessage(`${isExistUseReturnJson.message}`, "info");
             return false;
         }
     }
+}
+
+export function chunk<T>(iterable: Iterable<T>, size: number) {
+    return Array.from(iterable).reduce((prev: T[][], current) => {
+        const lastChunk = prev.slice(-1)[0];
+
+        // 第一次执行时,lastChunk为undefined
+        const currentLength = lastChunk?.length;
+
+        // 之后当满size时，新建
+        if (prev.length === 0 || currentLength % size === 0) {
+            prev.push([current]);
+        } else {
+            // 0 % size也 < size
+            if (currentLength % size < size) {
+                lastChunk.push(current);
+            }
+        }
+
+        return prev;
+    }, []);
+}
+
+/** 取整数的千位数字和百味数字的方法
+ *
+ * `position`从1开始，从右往左取
+ *
+ * 如千位即4，百位即3
+ */
+export function getPosition(number: number | string, position: number) {
+    const stringified = number.toString();
+
+    if (position < 1) {
+        return undefined;
+    }
+
+    // 越界
+    if (position > stringified.length) {
+        return undefined;
+    }
+
+    const reversed = stringified
+        .split("")
+        .reverse()
+        .join("");
+
+    return parseInt(reversed.charAt(position - 1), 10);
 }

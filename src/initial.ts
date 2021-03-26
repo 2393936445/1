@@ -1,6 +1,6 @@
 import swal from "sweetalert";
 
-import { DEBUG_MODE } from "./global";
+import { DEBUG_MODE } from "@src/store";
 import { setValue, getValue } from "@utils/common";
 
 //用户协议

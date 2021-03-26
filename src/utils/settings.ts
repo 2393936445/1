@@ -77,7 +77,7 @@ export function mergeSettings(controlCenter: SectionSetting[], pluginSettings: S
 
 //*-----------------------------------------------------------------------------------
 
-import { Global, DEBUG_MODE } from "../global";
+import { store, DEBUG_MODE } from "@src/store";
 import { getValue } from "@utils/common";
 
 /**
@@ -87,8 +87,8 @@ export function setDefaultValues(controlCenter: SectionSetting[]) {
     //todo 是都需要检查gm取出的值的合法性？
     for (const section of controlCenter) {
         for (const generic of section.settings) {
-            if (Global.USER_SETTINGS[generic.id] == undefined) {
-                Global.USER_SETTINGS[generic.id] = generic.default;
+            if (store.USER_SETTINGS[generic.id] == undefined) {
+                store.USER_SETTINGS[generic.id] = generic.default;
             }
         }
     }
@@ -97,7 +97,7 @@ export function setDefaultValues(controlCenter: SectionSetting[]) {
 export function returnDefaultValues() {
     for (const section of controlCenter) {
         for (const generic of section.settings) {
-            Global.USER_SETTINGS[generic.id] = generic.default;
+            store.USER_SETTINGS[generic.id] = generic.default;
         }
     }
 }
@@ -123,7 +123,7 @@ export async function initialUserSettings() {
     const flag = process.env.CRX ? true : DEBUG_MODE ? false : true;
 
     if (flag) {
-        Global.USER_SETTINGS = await getValue("USER_SETTINGS", {});
+        store.USER_SETTINGS = await getValue("USER_SETTINGS", {});
         setDefaultValues(controlCenter);
     }
 }

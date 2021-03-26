@@ -1,3 +1,5 @@
+export * as actions from "./actions";
+
 // export class Global {
 //     static messages: Message[] = [];
 //     static USER_SETTINGS: Setting = {};
@@ -15,10 +17,10 @@ interface GlobalState {
     collapse: boolean;
     /**是否显示与考试相关的按钮*/
     showExamQueryButton: boolean;
-    [propName: string]: any;
+    // [propName: string]: any;
 }
 
-export let Global: GlobalState = {
+export const store: GlobalState = {
     messages: [],
     USER_SETTINGS: {} as UserSettings,
     collapse: true,
@@ -30,7 +32,8 @@ export let BASE_URL: string | null;
 export let DEBUG_MODE: boolean;
 
 if (process.env.NODE_ENV === "development") {
-    BASE_URL = "http://localhost:8000/api/unipus";
+    // BASE_URL = "http://localhost:8000/api/unipus";
+    BASE_URL = "http://47.97.90.127/api/unipus";
     DEBUG_MODE = true;
 } else {
     // BASE_URL = "http://localhost:8000/api/unipus";
@@ -38,6 +41,6 @@ if (process.env.NODE_ENV === "development") {
     DEBUG_MODE = false;
 }
 
-import * as PACKAGE_JSON from "../package.json";
+import * as PACKAGE_JSON from "../../package.json";
 export const VERSION = PACKAGE_JSON.version;
 export const QUERY_INTERVAL = 3000; //单位ms
